@@ -1,12 +1,22 @@
-const template = document.createElement('template');
-template.innerHTML = `
+const todoItemTemplate = document.createElement('template');
+todoItemTemplate.innerHTML = `
   <style>
     .done{
-      color: red;
+      color: gray;
+      text-decoration: line-through;
     }
+    .todoName {
+      cursor: pointer;
+    }
+    
+    .deleteTodo{
+      display: in
+    }
+
   </style>
-  <div>
-  <p class="todoName">
+  <div class="todoItem">
+  <p class="todoName"></p>
+  <custom-button id="deleteTodo"> - </custom-button>
   </div>
 `;
 
@@ -19,11 +29,16 @@ class TodoItem extends HTMLElement {
     super();
 
     this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(document.importNode(template.content, true));
+    this.shadowRoot.appendChild(
+      document.importNode(todoItemTemplate.content, true)
+    );
     this.shadowRoot.querySelector('.todoName').innerText = this.getAttribute(
       'name'
     );
 
+    this.deleteTodoBtn = this.shadowRoot.querySelector('#deleteTodo');
+
+    this.deleteTodoEventListener();
     this.addToggleCompleteEventListener();
   }
 
@@ -38,7 +53,7 @@ class TodoItem extends HTMLElement {
     }
   }
 
-  addToggleCompleteEventListener() {
+  addToggleCompleteEventListener = () => {
     this.shadowRoot
       .querySelector('.todoName')
       .addEventListener('click', (e) => {
@@ -46,7 +61,13 @@ class TodoItem extends HTMLElement {
           new CustomEvent('toggleComplete', { bubbles: true })
         );
       });
-  }
+  };
+
+  deleteTodoEventListener = () => {
+    this.deleteTodoBtn.addEventListener('click', (e) => {
+      this.dispatchEvent(new CustomEvent('deleteTodo', { bubbles: true }));
+    });
+  };
 }
 
 window.customElements.define('todo-item', TodoItem);

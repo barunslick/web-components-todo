@@ -1,20 +1,16 @@
-class TodoApp {
+class ToDoApp {
   constructor() {
     this.todos = [];
-    this.todoInput = document.getElementById('todoInput');
-    this.addButton = document.getElementById('addTodoBtn');
-    this.todoList = document.getElementById('todoList');
+    this.todoInput = document.querySelector('#todoInput');
+    this.todoList = document.querySelector('#todoList');
 
-    this.createEventListeners();
+    this.createTodoEventHandler();
+    this.toggleCompletedEventHandler();
+    this.deleteTodoEventHandler();
   }
 
-  createEventListeners() {
-    this.createTodoEventListener();
-    this.toggleCompleteEventListener();
-  }
-
-  createTodoEventListener() {
-    this.addButton.addEventListener('click', (e) => {
+  createTodoEventHandler() {
+    this.todoInput.addEventListener('createTodo', (e) => {
       const todo = {
         id: +new Date(),
         name: this.todoInput.value,
@@ -23,12 +19,12 @@ class TodoApp {
 
       this.todos = [...this.todos, todo];
       this.todoList.innerHTML =
-        this.todoList.innerHTML + this.createTodoElement(todo);
-      console.log(this.todos);
+        this.getTodoElement(todo) + this.todoList.innerHTML;
+      this.todoInput.value = '';
     });
   }
 
-  toggleCompleteEventListener() {
+  toggleCompletedEventHandler() {
     this.todoList.addEventListener('toggleComplete', (e) => {
       const todoElement = e.target;
       const todoItemInArray = this.todos.find(
@@ -39,12 +35,21 @@ class TodoApp {
     });
   }
 
-  createTodoElement(todo) {
+  deleteTodoEventHandler() {
+    this.todoList.addEventListener('deleteTodo', (e) => {
+      const todoElement = e.target;
+      const todos = this.todos.filter((todo) => todo.id !== +todoElement.id);
+      this.todos = todos;
+      this.todoList.removeChild(todoElement);
+    });
+  }
+
+  getTodoElement(todo) {
     return `<todo-item id="${todo.id}" 
             name="${todo.name}" 
-            complete="${todo.complete}">
+            complete="${todo.completed}">
           </todo-item>`;
   }
 }
 
-const todo = new TodoApp();
+new ToDoApp();
