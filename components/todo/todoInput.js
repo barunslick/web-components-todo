@@ -1,4 +1,4 @@
-import { html, render } from './node_modules/lit-html/lit-html.js';
+import { html, render } from '../../node_modules/lit-html/lit-html.js';
 
 /**
  * Class for TodoInput which creates input field and button that inturn allows to add new todo.
