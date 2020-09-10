@@ -61,7 +61,7 @@ class ToDoApp {
   getTodos = () => {
     const todos = JSON.parse(localStorage.getItem('todos')) || [];
 
-    return todos;
+    return todos.reverse();
   };
 
   renderTodos = () => {

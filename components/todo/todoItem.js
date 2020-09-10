@@ -76,9 +76,7 @@ class TodoItem extends HTMLElement {
   };
 
   dispatchDeleteEvent = (e) => {
-    this.deleteTodoBtn.addEventListener('click', (e) => {
-      this.dispatchEvent(new CustomEvent('deleteTodo', { bubbles: true }));
-    });
+    this.dispatchEvent(new CustomEvent('deleteTodo', { bubbles: true }));
   };
 }
 
