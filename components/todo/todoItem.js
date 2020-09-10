@@ -1,16 +1,29 @@
 const todoItemTemplate = document.createElement('template');
 todoItemTemplate.innerHTML = `
   <style>
+    .todoItem{
+      display:flex;
+      align-items:center;
+      max-width: 400px;
+      margin:8px 0px;
+      padding: 4px 8px;
+      border: 1px solid #99b1bc;
+      border-radius: 8px;
+    }
+    p{
+      flex:3;
+    }
     .done{
       color: gray;
       text-decoration: line-through;
+      background: #CCDAE0;
     }
     .todoName {
       cursor: pointer;
     }
     
-    .deleteTodo{
-      display: in
+    #deleteTodo{
+      display: inline-block;
     }
 
   </style>
@@ -46,9 +59,9 @@ class TodoItem extends HTMLElement {
     console.log('hey');
     if (attrName === 'complete') {
       if (newVal === 'true') {
-        this.shadowRoot.querySelector('.todoName').classList.add('done');
+        this.shadowRoot.querySelector('.todoItem').classList.add('done');
       } else {
-        this.shadowRoot.querySelector('.todoName').classList.remove('done');
+        this.shadowRoot.querySelector('.todoItem').classList.remove('done');
       }
     }
   }
