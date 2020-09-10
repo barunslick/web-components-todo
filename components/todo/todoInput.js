@@ -3,11 +3,11 @@ todoInputTemplate.innerHTML = `
   <style>
     .todoInputContainer {
       display: flex;
-      max-width: 400px;
       margin:40px 0px;
     }
     #todoInput{
-      width: 80%;
+      width: calc(100% - 72px);
+      box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
     }
 
     #createTodoBtn{
@@ -16,7 +16,7 @@ todoInputTemplate.innerHTML = `
 
   </style>
   <div class="todoInputContainer">
-    <input id="todoInput">
+    <input id="todoInput" placeHolder="New Task">
     <custom-button id= "createTodoBtn">Add </custom-button>
   </div>
  `;
@@ -37,6 +37,9 @@ class TodoInput extends HTMLElement {
 
   addButtonEventListener = () => {
     this.addButton.addEventListener('click', (e) => {
+      if (!this.todoInput.value) {
+        return;
+      }
       this.dispatchEvent(new CustomEvent('createTodo', { bubbles: true }));
     });
   };

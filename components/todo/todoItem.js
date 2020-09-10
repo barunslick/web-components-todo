@@ -4,7 +4,6 @@ todoItemTemplate.innerHTML = `
     .todoItem{
       display:flex;
       align-items:center;
-      max-width: 400px;
       margin:8px 0px;
       padding: 4px 8px;
       border: 1px solid #99b1bc;
@@ -56,7 +55,6 @@ class TodoItem extends HTMLElement {
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
-    console.log('hey');
     if (attrName === 'complete') {
       if (newVal === 'true') {
         this.shadowRoot.querySelector('.todoItem').classList.add('done');
