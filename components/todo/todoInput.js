@@ -1,4 +1,4 @@
-import { html, render } from '../../node_modules/lit-html/lit-html.js';
+import { html, render } from './node_modules/lit-html/lit-html.js';
 
 /**
  * Class for TodoInput which creates input field and button that inturn allows to add new todo.
@@ -23,7 +23,7 @@ class TodoInput extends HTMLElement {
           margin: 40px 0px;
         }
         #todoInput {
-          width: calc(100% - 54px);
+          width: calc(100% - 52px);
           box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.06);
           border: none;
           border-bottom: 1px solid grey;
