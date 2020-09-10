@@ -23,8 +23,10 @@ class TodoInput extends HTMLElement {
           margin: 40px 0px;
         }
         #todoInput {
-          width: calc(100% - 72px);
-          box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+          width: calc(100% - 54px);
+          box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.06);
+          border: none;
+          border-bottom: 1px solid grey;
         }
 
         #createTodoBtn {
