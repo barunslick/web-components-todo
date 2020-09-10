@@ -1,30 +1,40 @@
-const btnTemplate = document.createElement('template');
-btnTemplate.innerHTML = `
-  <style>
-    button {
-      background: none;
-      width: 40px;
-      height: 40px;
-      border: none;
-      cursor: pointer;
-      background: #6396ba;
-      color: white;
-      border-radius: 20px;
-    }
-  </style>
-  <button>
-  <slot>
-  </slot>
-  </button>
-`;
+import { html, render } from '../../node_modules/lit-html/lit-html.js';
 
-class Button extends HTMLElement {
+/**
+ * Class for custom button element.
+ *
+ * @class CustomButton
+ * @extends {HTMLElement}
+ */
+class CustomButton extends HTMLElement {
+  /**
+   *Creates an instance of CustomButton.
+   * @memberof CustomButton
+   */
   constructor() {
     super();
-
     this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(document.importNode(btnTemplate.content, true));
+    const template = html`
+      <style>
+        button {
+          background: none;
+          width: 40px;
+          height: 40px;
+          border: none;
+          cursor: pointer;
+          background: #6396ba;
+          color: white;
+          border-radius: 20px;
+        }
+      </style>
+
+      <button>
+        <slot></slot>
+      </button>
+    `;
+
+    render(template, this.shadowRoot);
   }
 }
 
-window.customElements.define('custom-button', Button);
+window.customElements.define('custom-button', CustomButton);

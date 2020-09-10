@@ -1,4 +1,16 @@
+import { html, render } from '../node_modules/lit-html/lit-html.js';
+import { repeat } from '../node_modules/lit-html/directives/repeat.js';
+
+/**
+ * Main app class.
+ *
+ * @class ToDoApp
+ */
 class ToDoApp {
+  /**
+   * Creates an instance of ToDoApp and renders all the pre-exisitng todos.
+   * @memberof ToDoApp
+   */
   constructor() {
     this.todos = this.getTodos();
     this.todoInput = document.querySelector('#todoInput');
@@ -8,9 +20,14 @@ class ToDoApp {
     this.toggleCompletedEventHandler();
     this.deleteTodoEventHandler();
 
-    this.renderTodos();
+    this.renderTodos(this.todos);
   }
 
+  /**
+   * Creates a event listener for createTodo custom event, which adds a new todo.
+   *
+   * @memberof ToDoApp
+   */
   createTodoEventHandler = () => {
     this.todoInput.addEventListener('createTodo', (e) => {
       const todo = {
@@ -19,15 +36,19 @@ class ToDoApp {
         complete: false,
       };
 
-      this.todos = [...this.todos, todo];
-      this.todoList.innerHTML =
-        this.getTodoElement(todo) + this.todoList.innerHTML;
-      this.todoInput.value = '';
+      this.todos = [todo, ...this.todos];
+      this.renderTodos(this.todos);
 
       this.saveTodos();
+      this.todoInput.value = '';
     });
   };
 
+  /**
+   * Creates a event listener for custom toggleComplete event, which toggles a todo as complete or not complete.
+   *
+   * @memberof ToDoApp
+   */
   toggleCompletedEventHandler = () => {
     this.todoList.addEventListener('toggleComplete', (e) => {
       const todoElement = e.target;
@@ -41,6 +62,11 @@ class ToDoApp {
     });
   };
 
+  /**
+   * Create a event listener for custom deleteTodo event, which deletes a given todo.
+   *
+   * @memberof ToDoApp
+   */
   deleteTodoEventHandler = () => {
     this.todoList.addEventListener('deleteTodo', (e) => {
       const todoElement = e.target;
@@ -52,29 +78,60 @@ class ToDoApp {
     });
   };
 
+  /**
+   * Save the todos to localStorage.
+   *
+   * @memberof ToDoApp
+   */
   saveTodos = () => {
     const todos = JSON.stringify(this.todos);
 
     localStorage.setItem('todos', todos);
   };
 
+  /**
+   * Gets todo from localStorage.
+   *
+   * @memberof ToDoApp
+   * @returns {Array} todos
+   */
   getTodos = () => {
     const todos = JSON.parse(localStorage.getItem('todos')) || [];
 
-    return todos.reverse();
+    return todos;
   };
 
-  renderTodos = () => {
-    const todos = this.todos.map((todo) => this.getTodoElement(todo));
+  /**
+   * Renders all the todo items.
+   *
+   * @memberof ToDoApp
+   */
+  renderTodos = (todos) => {
+    const todosTemplate = html`
+      ${repeat(
+        todos,
+        (todos) => todos.id,
+        (todo) => this.getTodoElement(todo)
+      )}
+    `;
 
-    this.todoList.innerHTML = [...todos].join('');
+    render(todosTemplate, this.todoList);
   };
 
+  /**
+   * Creates a lit-html template for given todo item.
+   *
+   * @param {Object} todo
+   * @returns {Template}
+   * @memberof ToDoApp
+   */
   getTodoElement(todo) {
-    return `<todo-item id="${todo.id}" 
-            name="${todo.name}" 
-            complete="${todo.complete}">
-          </todo-item>`;
+    return html`<todo-item
+      id="${todo.id}"
+      name="${todo.name}"
+      complete="${todo.complete}"
+    >
+    </todo-item>`;
   }
 }
 
