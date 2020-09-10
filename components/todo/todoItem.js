@@ -44,14 +44,11 @@ class TodoItem extends HTMLElement {
     this.shadowRoot.appendChild(
       document.importNode(todoItemTemplate.content, true)
     );
-    this.shadowRoot.querySelector('.todoName').innerText = this.getAttribute(
-      'name'
-    );
+
+    this.todoName = this.shadowRoot.querySelector('.todoName');
+    this.todoName.innerText = this.getAttribute('name');
 
     this.deleteTodoBtn = this.shadowRoot.querySelector('#deleteTodo');
-
-    this.deleteTodoEventListener();
-    this.addToggleCompleteEventListener();
   }
 
   attributeChangedCallback(attrName, oldVal, newVal) {
@@ -64,17 +61,21 @@ class TodoItem extends HTMLElement {
     }
   }
 
-  addToggleCompleteEventListener = () => {
-    this.shadowRoot
-      .querySelector('.todoName')
-      .addEventListener('click', (e) => {
-        this.dispatchEvent(
-          new CustomEvent('toggleComplete', { bubbles: true })
-        );
-      });
+  connectedCallback() {
+    this.todoName.addEventListener('click', this.dispatchToggleEvent);
+    this.deleteTodoBtn.addEventListener('click', this.dispatchDeleteEvent);
+  }
+
+  disconnectedCallback() {
+    this.todoName.addEventListener('click', this.dispatchToggleEvent);
+    this.deleteTodoBtn.removeEventListener('click', this.dispatchDeleteEvent);
+  }
+
+  dispatchToggleEvent = (e) => {
+    this.dispatchEvent(new CustomEvent('toggleComplete', { bubbles: true }));
   };
 
-  deleteTodoEventListener = () => {
+  dispatchDeleteEvent = (e) => {
     this.deleteTodoBtn.addEventListener('click', (e) => {
       this.dispatchEvent(new CustomEvent('deleteTodo', { bubbles: true }));
     });

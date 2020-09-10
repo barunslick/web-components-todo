@@ -31,17 +31,21 @@ class TodoInput extends HTMLElement {
     );
     this.todoInput = this.shadowRoot.querySelector('#todoInput');
     this.addButton = this.shadowRoot.querySelector('#createTodoBtn');
-
-    this.addButtonEventListener();
   }
 
-  addButtonEventListener = () => {
-    this.addButton.addEventListener('click', (e) => {
-      if (!this.todoInput.value) {
-        return;
-      }
-      this.dispatchEvent(new CustomEvent('createTodo', { bubbles: true }));
-    });
+  connectedCallback() {
+    this.addButton.addEventListener('click', this.dispatchCreateTodoEvent);
+  }
+
+  disconnectedCallback() {
+    this.addButton.removeEventListener('click', this.dispatchCreateTodoEvent);
+  }
+
+  dispatchCreateTodoEvent = (e) => {
+    if (!this.todoInput.value) {
+      return;
+    }
+    this.dispatchEvent(new CustomEvent('createTodo', { bubbles: true }));
   };
 
   get value() {
