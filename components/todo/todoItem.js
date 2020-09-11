@@ -4,9 +4,16 @@ import { LitElement, html, css } from 'lit-element';
  * Class for each item in Todo.
  *
  * @class TodoItem
- * @extends {HTMLElement}
+ * @extends {LitElement}
  */
 class TodoItem extends LitElement {
+  /**
+   * Returns the style for the component.
+   *
+   * @readonly
+   * @static
+   * @memberof TodoItem
+   */
   static get styles() {
     return css`
       .todoItem {
@@ -34,8 +41,9 @@ class TodoItem extends LitElement {
       }
     `;
   }
+
   /**
-   * Monitor complete attribute for changes.
+   * Declares properties for component.
    *
    * @readonly
    * @static
@@ -43,7 +51,10 @@ class TodoItem extends LitElement {
    */
   static get properties() {
     return {
+      id: { type: String },
+      name: { type: String },
       complete: { type: String },
+      actions: { type: Object },
     };
   }
 
@@ -54,9 +65,17 @@ class TodoItem extends LitElement {
   constructor() {
     super();
 
+    this.id = `${+new Date()}`;
+    this.name = 'Untitiled';
     this.complete = 'false';
   }
 
+  /**
+   *
+   *
+   * @returns
+   * @memberof TodoItem
+   */
   render() {
     return html`
       <div class="todoItem ${this.complete === 'true' ? 'done' : ''}">
@@ -69,15 +88,16 @@ class TodoItem extends LitElement {
       </div>
     `;
   }
+
   /**
-   * Toggles a todo as complete or not complete.
+   * Calls parent to toggle a todo as complete or not complete.
    *
    * @memberof TodoItem
    */
   toggleComplete = () => this.actions.toggleComplete(this);
 
   /**
-   * Deletes a todo.
+   * Calls parent deleteTodo function.
    *
    * @memberof TodoItem
    */

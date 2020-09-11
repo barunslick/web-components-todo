@@ -12,7 +12,7 @@ class ToDoApp {
    * @memberof ToDoApp
    */
   constructor() {
-    this.todos = this.getTodos();
+    this.todos = this.getTodosFromLocalStorage();
     this.todoInput = document.querySelector('#todoInput');
     this.todoList = document.querySelector('#todoList');
 
@@ -24,21 +24,21 @@ class ToDoApp {
   }
 
   /**
-   * Creates a event listener for createTodo custom event, which adds a new todo.
+   * Creates a new todo.
    *
    * @memberof ToDoApp
    */
-  createTodo = () => {
+  createTodo = (todoName) => {
     const todo = {
       id: +new Date(),
-      name: this.todoInput.value,
+      name: todoName,
       complete: false,
     };
 
     this.todos = [todo, ...this.todos];
     this.renderTodos(this.todos);
 
-    this.saveTodos();
+    this.saveTodosToLocalStorage();
     this.todoInput.value = '';
   };
 
@@ -52,7 +52,7 @@ class ToDoApp {
     todoItemInArray.complete = !todoItemInArray.complete;
     element.setAttribute('complete', todoItemInArray.complete);
 
-    this.saveTodos();
+    this.saveTodosToLocalStorage();
   };
 
   /**
@@ -65,7 +65,7 @@ class ToDoApp {
     this.todos = todos;
     this.todoList.removeChild(element);
 
-    this.saveTodos();
+    this.saveTodosToLocalStorage();
   };
 
   /**
@@ -73,7 +73,7 @@ class ToDoApp {
    *
    * @memberof ToDoApp
    */
-  saveTodos = () => {
+  saveTodosToLocalStorage = () => {
     const todos = JSON.stringify(this.todos);
 
     localStorage.setItem('todos', todos);
@@ -85,7 +85,7 @@ class ToDoApp {
    * @memberof ToDoApp
    * @returns {Array} todos
    */
-  getTodos = () => {
+  getTodosFromLocalStorage = () => {
     const todos = JSON.parse(localStorage.getItem('todos')) || [];
 
     return todos;
