@@ -43,7 +43,14 @@ class TodoInput extends LitElement {
   static get properties() {
     return {
       actions: { type: Object },
+      inputValue: { type: String },
     };
+  }
+
+  constructor() {
+    super();
+
+    this.inputValue = '';
   }
 
   /**
@@ -55,7 +62,12 @@ class TodoInput extends LitElement {
   render() {
     return html`
       <div class="todoInputContainer">
-        <input id="todoInput" placeholder="New Task" />
+        <input
+          id="todoInput"
+          placeholder="New Task"
+          .value=${this.inputValue}
+          @input=${this.handleInputChange}
+        />
         <custom-button id="createTodoBtn" @click="${this.createTodo}">
           +
         </custom-button>
@@ -75,6 +87,10 @@ class TodoInput extends LitElement {
     this.actions.createTodo(this.value);
   };
 
+  handleInputChange = (e) => {
+    this.inputValue = e.target.value;
+  };
+
   /**
    * Getter for input value.
    *
@@ -82,7 +98,7 @@ class TodoInput extends LitElement {
    * @returns {String}
    */
   get value() {
-    return this.shadowRoot.getElementById('todoInput').value;
+    return this.inputValue;
   }
 
   /**
@@ -91,7 +107,7 @@ class TodoInput extends LitElement {
    * @memberof TodoInput
    */
   set value(text) {
-    this.shadowRoot.getElementById('todoInput').value = text;
+    this.inputValue = text;
   }
 }
 
