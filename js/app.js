@@ -43,7 +43,7 @@ class ToDoApp {
   };
 
   /**
-   * Creates a event listener for custom toggleComplete event, which toggles a todo as complete or not complete.
+   * Toggles a todo as complete or not complete.
    *
    * @memberof ToDoApp
    */
@@ -56,7 +56,7 @@ class ToDoApp {
   };
 
   /**
-   * Create a event listener for custom deleteTodo event, which deletes a given todo.
+   * Deletes a given todo.
    *
    * @memberof ToDoApp
    */

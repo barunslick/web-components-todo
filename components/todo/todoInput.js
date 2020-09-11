@@ -69,7 +69,7 @@ class TodoInput extends HTMLElement {
    *
    * @memberof TodoInput
    */
-  createTodo = (e) => {
+  createTodo = () => {
     if (!this.todoInput.value) {
       return;
     }
