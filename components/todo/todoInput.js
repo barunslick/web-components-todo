@@ -52,7 +52,7 @@ class TodoInput extends HTMLElement {
    * @memberof TodoInput
    */
   connectedCallback() {
-    this.addButton.addEventListener('click', this.dispatchCreateTodoEvent);
+    this.addButton.addEventListener('click', this.createTodo);
   }
 
   /**
@@ -61,7 +61,7 @@ class TodoInput extends HTMLElement {
    * @memberof TodoInput
    */
   disconnectedCallback() {
-    this.addButton.removeEventListener('click', this.dispatchCreateTodoEvent);
+    this.addButton.removeEventListener('click', this.createTodo);
   }
 
   /**
@@ -69,11 +69,11 @@ class TodoInput extends HTMLElement {
    *
    * @memberof TodoInput
    */
-  dispatchCreateTodoEvent = (e) => {
+  createTodo = (e) => {
     if (!this.todoInput.value) {
       return;
     }
-    this.dispatchEvent(new CustomEvent('createTodo', { bubbles: true }));
+    this.actions.createTodo();
   };
 
   /**

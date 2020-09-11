@@ -92,8 +92,8 @@ class TodoItem extends HTMLElement {
    */
   connectedCallback() {
     this.todoName.innerText = this.getAttribute('name');
-    this.todoName.addEventListener('click', this.dispatchToggleEvent);
-    this.deleteTodoBtn.addEventListener('click', this.dispatchDeleteEvent);
+    this.todoName.addEventListener('click', this.toggleComplete);
+    this.deleteTodoBtn.addEventListener('click', this.deleteTodo);
   }
 
   /**
@@ -102,27 +102,23 @@ class TodoItem extends HTMLElement {
    * @memberof TodoItem
    */
   disconnectedCallback() {
-    this.todoName.addEventListener('click', this.dispatchToggleEvent);
-    this.deleteTodoBtn.removeEventListener('click', this.dispatchDeleteEvent);
+    this.todoName.addEventListener('click', this.toggleComplete);
+    this.deleteTodoBtn.removeEventListener('click', this.deleteTodo);
   }
 
   /**
-   * Dispatches a toggleComplete custom event a todo is ticked off/ marked as completed.
+   * Toggles a todo as complete or not complete.
    *
    * @memberof TodoItem
    */
-  dispatchToggleEvent = (e) => {
-    this.dispatchEvent(new CustomEvent('toggleComplete', { bubbles: true }));
-  };
+  toggleComplete = () => this.actions.toggleComplete(this);
 
   /**
-   * Dispatches a deleteTodo custom event when a todo is deleted.
+   * Deletes a todo.
    *
    * @memberof TodoItem
    */
-  dispatchDeleteEvent = (e) => {
-    this.dispatchEvent(new CustomEvent('deleteTodo', { bubbles: true }));
-  };
+  deleteTodo = () => this.actions.deleteTodo(this);
 }
 
 window.customElements.define('todo-item', TodoItem);

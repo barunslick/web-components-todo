@@ -16,9 +16,9 @@ class ToDoApp {
     this.todoInput = document.querySelector('#todoInput');
     this.todoList = document.querySelector('#todoList');
 
-    this.createTodoEventHandler();
-    this.toggleCompletedEventHandler();
-    this.deleteTodoEventHandler();
+    this.todoInput.actions = {
+      createTodo: this.createTodo,
+    };
 
     this.renderTodos(this.todos);
   }
@@ -28,20 +28,18 @@ class ToDoApp {
    *
    * @memberof ToDoApp
    */
-  createTodoEventHandler = () => {
-    this.todoInput.addEventListener('createTodo', (e) => {
-      const todo = {
-        id: +new Date(),
-        name: this.todoInput.value,
-        complete: false,
-      };
+  createTodo = () => {
+    const todo = {
+      id: +new Date(),
+      name: this.todoInput.value,
+      complete: false,
+    };
 
-      this.todos = [todo, ...this.todos];
-      this.renderTodos(this.todos);
+    this.todos = [todo, ...this.todos];
+    this.renderTodos(this.todos);
 
-      this.saveTodos();
-      this.todoInput.value = '';
-    });
+    this.saveTodos();
+    this.todoInput.value = '';
   };
 
   /**
@@ -49,17 +47,12 @@ class ToDoApp {
    *
    * @memberof ToDoApp
    */
-  toggleCompletedEventHandler = () => {
-    this.todoList.addEventListener('toggleComplete', (e) => {
-      const todoElement = e.target;
-      const todoItemInArray = this.todos.find(
-        (todo) => todo.id === +todoElement.id
-      );
-      todoItemInArray.complete = !todoItemInArray.complete;
-      todoElement.setAttribute('complete', todoItemInArray.complete);
+  toggleComplete = (element) => {
+    const todoItemInArray = this.todos.find((todo) => todo.id === +element.id);
+    todoItemInArray.complete = !todoItemInArray.complete;
+    element.setAttribute('complete', todoItemInArray.complete);
 
-      this.saveTodos();
-    });
+    this.saveTodos();
   };
 
   /**
@@ -67,15 +60,12 @@ class ToDoApp {
    *
    * @memberof ToDoApp
    */
-  deleteTodoEventHandler = () => {
-    this.todoList.addEventListener('deleteTodo', (e) => {
-      const todoElement = e.target;
-      const todos = this.todos.filter((todo) => todo.id !== +todoElement.id);
-      this.todos = todos;
-      this.todoList.removeChild(todoElement);
+  deleteTodo = (element) => {
+    const todos = this.todos.filter((todo) => todo.id !== +element.id);
+    this.todos = todos;
+    this.todoList.removeChild(element);
 
-      this.saveTodos();
-    });
+    this.saveTodos();
   };
 
   /**
@@ -130,6 +120,10 @@ class ToDoApp {
       id="${todo.id}"
       name="${todo.name}"
       complete="${todo.complete}"
+      .actions=${{
+        deleteTodo: this.deleteTodo,
+        toggleComplete: this.toggleComplete,
+      }}
     >
     </todo-item>`;
   }
