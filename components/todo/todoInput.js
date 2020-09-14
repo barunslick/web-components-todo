@@ -1,59 +1,113 @@
-const todoInputTemplate = document.createElement('template');
-todoInputTemplate.innerHTML = `
-  <style>
-    .todoInputContainer {
-      display: flex;
-      margin:40px 0px;
-    }
-    #todoInput{
-      width: calc(100% - 72px);
-      box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-    }
+import { LitElement, html, css } from 'lit-element';
 
-    #createTodoBtn{
-      margin: 4px;
-    }
+/**
+ * Class for TodoInput which creates input field and button that inturn allows to add new todo.
+ *
+ * @class TodoInput
+ * @extends {LitElement}
+ */
+class TodoInput extends LitElement {
+  /**
+   * Returns the style for the component.
+   *
+   * @readonly
+   * @static
+   * @memberof TodoInput
+   */
+  static get styles() {
+    return css`
+      .todoInputContainer {
+        display: flex;
+        margin: 40px 0px;
+      }
+      #todoInput {
+        width: calc(100% - 52px);
+        box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.06);
+        border: none;
+        border-bottom: 1px solid grey;
+      }
 
-  </style>
-  <div class="todoInputContainer">
-    <input id="todoInput" placeHolder="New Task">
-    <custom-button id= "createTodoBtn">Add </custom-button>
-  </div>
- `;
+      #createTodoBtn {
+        margin: 4px;
+      }
+    `;
+  }
 
-class TodoInput extends HTMLElement {
+  /**
+   * Declares properties for component.
+   *
+   * @readonly
+   * @static
+   * @memberof TodoItem
+   */
+  static get properties() {
+    return {
+      actions: { type: Object },
+      inputValue: { type: String },
+    };
+  }
+
   constructor() {
     super();
 
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.appendChild(
-      document.importNode(todoInputTemplate.content, true)
-    );
-    this.todoInput = this.shadowRoot.querySelector('#todoInput');
-    this.addButton = this.shadowRoot.querySelector('#createTodoBtn');
+    this.inputValue = '';
   }
 
-  connectedCallback() {
-    this.addButton.addEventListener('click', this.dispatchCreateTodoEvent);
+  /**
+   * Renders the component.
+   *
+   * @returns
+   * @memberof TodoInput
+   */
+  render() {
+    return html`
+      <div class="todoInputContainer">
+        <input
+          id="todoInput"
+          placeholder="New Task"
+          .value=${this.inputValue}
+          @input=${this.handleInputChange}
+        />
+        <custom-button id="createTodoBtn" @click="${this.createTodo}">
+          +
+        </custom-button>
+      </div>
+    `;
   }
 
-  disconnectedCallback() {
-    this.addButton.removeEventListener('click', this.dispatchCreateTodoEvent);
-  }
-
-  dispatchCreateTodoEvent = (e) => {
-    if (!this.todoInput.value) {
+  /**
+   * Calls createTodo in parent, which creates a new todo.
+   *
+   * @memberof TodoInput
+   */
+  createTodo = () => {
+    if (!this.value) {
       return;
     }
-    this.dispatchEvent(new CustomEvent('createTodo', { bubbles: true }));
+    this.actions.createTodo(this.value);
   };
 
+  handleInputChange = (e) => {
+    this.inputValue = e.target.value;
+  };
+
+  /**
+   * Getter for input value.
+   *
+   * @memberof TodoInput
+   * @returns {String}
+   */
   get value() {
-    return this.todoInput.value;
+    return this.inputValue;
   }
 
+  /**
+   * Setter for input value.
+   *
+   * @memberof TodoInput
+   */
   set value(text) {
-    this.todoInput.value = text;
+    this.inputValue = text;
   }
 }
 
